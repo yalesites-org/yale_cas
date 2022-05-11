@@ -1,6 +1,6 @@
 {
     "name": "yalesites-org/yale_cas",
-    "type": "drupal-module",
+    "type": "drupal-custom-module",
     "minimum-stability": "dev",
     "require": {
         "drupal/cas_attributes": "^2.0@beta",
