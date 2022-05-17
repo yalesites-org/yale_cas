@@ -28,5 +28,11 @@ function yale_cas_form_user_form_alter(&$form, FormStateInterface $form_state, $
 
     $form['account']['pass']['#access'] = FALSE;
     $form['account']['current_pass']['#access'] = FALSE;
+
+    // Fields populated from CAS attributes should not be editable.
+    if (isset($form['field_first_name'], $form['field_last_name'])) {
+      $form['field_first_name']['#disabled'] = TRUE;
+      $form['field_last_name']['#disabled'] = TRUE;
+    }
   }
 }
