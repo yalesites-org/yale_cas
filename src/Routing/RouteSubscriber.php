@@ -14,9 +14,9 @@ class RouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection) {
-    // Change path '/casservices' to '/yalesites-casservice'.
+    // Change path '/casservice' to '/cas?app=yalesites'.
     if ($route = $collection->get('cas.service')) {
-      $route->setPath('/yalesites-casservice');
+      $route->setPath('/cas?app=yalesites');
     }
   }
 
