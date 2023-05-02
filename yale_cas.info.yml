@@ -1,7 +1,7 @@
 name: Yale CAS
 description: 'Provide default configurations for CAS and route override for attribute support.'
 type: module
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 ||| ^10
 dependencies:
   - drupal:cas
   - drupal:cas_attributes
