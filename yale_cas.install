@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function yale_cas_install() {
+  // Set the default configuration of the 'cas' module.
+  $updateCasConfig = \Drupal::configFactory()
+    ->getEditable('cas.settings')
+    ->get();
+  $updateCasConfig['login_link_enabled'] = true;
+  $updateCasConfig['login_link_label'] = 'Login with CAS';
+  $updateCasConfig['login_success_message'] = '';
+  $updateCasConfig['server'] = [
+    'version' => '3.0',
+    'protocol' => 'https',
+    'hostname' => 'secure.its.yale.edu',
+    'port' => 443,
+    'path' => '/cas',
+    'verify' => 0,
+    'cert' => '',
+  ];
+  \Drupal::configFactory()
+    ->getEditable('cas.settings')
+    ->setData($updateCasConfig)
+    ->save();
+
+  // Set the default configuration of the 'cas_attributes' module.
+  $updateCasAttrConfig = \Drupal::configFactory()
+    ->getEditable('cas_attributes.settings')
+    ->get();
+  $updateCasAttrConfig['sitewide_token_support'] = true;
+  $updateCasAttrConfig['field'] = [
+    'sync_frequency' => '2',
+    'overwrite' => 'true',
+    'mappings' => [
+      'mail' => '[cas:attribute:mail]',
+    ],
+  ];
+  \Drupal::configFactory()
+    ->getEditable('cas_attributes.settings')
+    ->setData($updateCasAttrConfig)
+    ->save();
+}
