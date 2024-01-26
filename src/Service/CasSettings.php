@@ -3,10 +3,8 @@
 namespace Drupal\yale_cas\Service;
 
 use Drupal\cas\Service\CasUserManager;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class CasSettings.
@@ -19,20 +17,6 @@ class CasSettings {
    * @var \Drupal\cas\Service\CasUserManager
    */
   protected $casUserManager;
-
-  /**
-   * The configuration factory service.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * The logger service.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
 
   /**
    * Alter the User form.
@@ -91,19 +75,9 @@ class CasSettings {
    *
    * @param \Drupal\cas\Service\CasUserManager $casUserManager
    *   The CAS user manager service.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   The logger service.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   The configuration factory service.
    */
-  public function __construct(
-    CasUserManager $casUserManager,
-    ConfigFactoryInterface $configFactory,
-    LoggerInterface $logger
-  ) {
+  public function __construct(CasUserManager $casUserManager) {
     $this->casUserManager = $casUserManager;
-    $this->configFactory = $configFactory;
-    $this->logger = $logger;
   }
 
 }

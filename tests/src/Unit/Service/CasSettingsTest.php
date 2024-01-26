@@ -3,11 +3,9 @@
 namespace Drupal\Tests\yale_cas\Unit\Service;
 
 use Drupal\cas\Service\CasUserManager;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\user\Entity\User;
 use Drupal\yale_cas\Service\CasSettings;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 /**
  * Class CasSettingsTest.
@@ -32,11 +30,8 @@ class CasSettingsTest extends TestCase {
   protected function setUp(): void {
     // Mock dependencies.
     $casUserManager = $this->createMock(CasUserManager::class);
-    $logger = $this->createMock(LoggerInterface::class);
-    $configFactory = $this->createMock(ConfigFactoryInterface::class);
-
     // Create the CasSettings instance.
-    $this->casSettings = new CasSettings($casUserManager, $configFactory, $logger);
+    $this->casSettings = new CasSettings($casUserManager);
   }
 
   /**

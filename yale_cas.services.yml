@@ -7,4 +7,4 @@ services:
   # A service of utilities for managing YaleSites settings.
   yale_cas.settings:
     class: Drupal\yale_cas\Service\CasSettings
-    arguments: ['@cas.user_manager', '@config.factory', '@logger.channel.default']
+    arguments: ['@cas.user_manager']
