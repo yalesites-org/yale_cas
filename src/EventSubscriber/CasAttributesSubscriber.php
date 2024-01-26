@@ -22,7 +22,10 @@ class CasAttributesSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Append app=yalesites to CAS redirect.
    *
+   * @param \Drupal\cas\Event\CasPreRedirectEvent $event
+   *   The CAS event.
    */
   public function onCasPreRedirect(CasPreRedirectEvent $event) {
     $casRedirectData = $event->getCasRedirectData();
