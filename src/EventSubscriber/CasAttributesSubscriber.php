@@ -2,10 +2,9 @@
 
 namespace Drupal\yale_cas\EventSubscriber;
 
-use Drupal;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\cas\Event\CasPreRedirectEvent;
 use Drupal\cas\Service\CasHelper;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -52,8 +51,10 @@ class CasAttributesSubscriber implements EventSubscriberInterface {
     $service_parameters = [
       'app' => 'yalesites',
     ];
+
     // Allow other modules to alter service parameters.
     $this->moduleHandler->invokeAll('yale_cas_pre_redirect_service_parameters_alter', [&$service_parameters, $event]);
+
     // Set all service parameters.
     foreach ($service_parameters as $key => $value) {
       $casRedirectData->setServiceParameter($key, $value);
