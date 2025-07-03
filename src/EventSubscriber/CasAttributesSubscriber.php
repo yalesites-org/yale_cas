@@ -47,18 +47,15 @@ class CasAttributesSubscriber implements EventSubscriberInterface {
    */
   public function onCasPreRedirect(CasPreRedirectEvent $event) {
     $casRedirectData = $event->getCasRedirectData();
-    // Set default service parameters.
-    $service_parameters = [
-      'app' => 'yalesites',
-    ];
+    
+    // Set default app parameter value.
+    $app_value = 'yalesites';
 
-    // Allow other modules to alter service parameters.
-    $this->moduleHandler->invokeAll('yale_cas_pre_redirect_service_parameters_alter', [&$service_parameters, $event]);
+    // Allow other modules to alter the app parameter value.
+    $this->moduleHandler->invokeAll('yale_cas_app_parameter_alter', [&$app_value, $event]);
 
-    // Set all service parameters.
-    foreach ($service_parameters as $key => $value) {
-      $casRedirectData->setServiceParameter($key, $value);
-    }
+    // Set the app service parameter.
+    $casRedirectData->setServiceParameter('app', $app_value);
   }
 
 }

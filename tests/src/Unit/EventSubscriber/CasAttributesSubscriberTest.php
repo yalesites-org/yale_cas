@@ -8,16 +8,16 @@ use PHPUnit\Framework\TestCase;
 
 class CasAttributesSubscriberTest extends TestCase {
 
-  public function testAppServiceParameterCanBeOverriddenByHook() {
-    // Mock the module handler to alter the service parameters.
+  public function testAppParameterCanBeOverriddenByHook() {
+    // Mock the module handler to alter the app parameter.
     $module_handler = $this->createMock(ModuleHandlerInterface::class);
     $module_handler->expects($this->once())
       ->method('invokeAll')
       ->with(
-        'yale_cas_pre_redirect_service_parameters_alter',
+        'yale_cas_app_parameter_alter',
         $this->callback(function (&$args) {
-          // Simulate a module changing the 'app' parameter.
-          $args[0]['app'] = 'custom_override';
+          // Simulate a module changing the app parameter.
+          $args[0] = 'custom_override';
           return true;
         })
       );
@@ -29,6 +29,28 @@ class CasAttributesSubscriberTest extends TestCase {
     $casRedirectData->expects($this->once())
       ->method('setServiceParameter')
       ->with('app', 'custom_override');
+
+    $event = $this->createMock(CasPreRedirectEvent::class);
+    $event->method('getCasRedirectData')->willReturn($casRedirectData);
+
+    $subscriber = new CasAttributesSubscriber($module_handler);
+    $subscriber->onCasPreRedirect($event);
+  }
+
+  public function testDefaultAppParameterWhenNoHook() {
+    // Mock the module handler with no hook implementations.
+    $module_handler = $this->createMock(ModuleHandlerInterface::class);
+    $module_handler->expects($this->once())
+      ->method('invokeAll')
+      ->with('yale_cas_app_parameter_alter', $this->anything());
+
+    // Mock CasRedirectData and CasPreRedirectEvent.
+    $casRedirectData = $this->getMockBuilder('stdClass')
+      ->addMethods(['setServiceParameter'])
+      ->getMock();
+    $casRedirectData->expects($this->once())
+      ->method('setServiceParameter')
+      ->with('app', 'yalesites');
 
     $event = $this->createMock(CasPreRedirectEvent::class);
     $event->method('getCasRedirectData')->willReturn($casRedirectData);

@@ -11,22 +11,21 @@ composer require yalesites-org/yale_cas
 drush en yale_cas
 ```
 
-## Altering CAS Service Parameters via Hook
+## Altering CAS App Parameter via Hook
 
-The Yale CAS module provides a hook that allows other modules to alter the CAS service parameters before redirecting to the CAS server. By default, the `app` service parameter is set to `yalesites`, but you can override or add parameters using the following hook in a custom module:
+The Yale CAS module provides a hook that allows other modules to alter the CAS `app` parameter before redirecting to the CAS server. By default, the `app` parameter is set to `yalesites`, but you can override it using the following hook in a custom module:
 
 ```php
 /**
- * Implements hook_yale_cas_pre_redirect_service_parameters_alter().
+ * Implements hook_yale_cas_app_parameter_alter().
  */
-function MYMODULE_yale_cas_pre_redirect_service_parameters_alter(array &$service_parameters, $event) {
+function MYMODULE_yale_cas_app_parameter_alter(&$app_value, $event) {
   // Override the 'app' parameter.
-  $service_parameters['app'] = 'my_custom_app';
-  // Add or modify other service parameters as needed.
+  $app_value = 'my_custom_app';
 }
 ```
 
-This hook is invoked just before the CAS redirect, allowing you to customize the service parameters sent to the CAS server.
+This hook is invoked just before the CAS redirect, allowing you to customize the app parameter sent to the CAS server.
 
 ## Contribution / Collaboration
 
