@@ -2,6 +2,7 @@ services:
   # Route Subscriber alters the default endpoint for CAS to match Yale ITS.
   yale_cas.cas_attributes_event_subscriber:
     class: Drupal\yale_cas\EventSubscriber\CasAttributesSubscriber
+    arguments: ['@module_handler']
     tags:
       - {name: event_subscriber}
   # A service of utilities for managing YaleSites settings.
