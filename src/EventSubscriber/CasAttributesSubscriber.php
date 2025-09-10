@@ -34,7 +34,7 @@ class CasAttributesSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[CasHelper::EVENT_PRE_REDIRECT][] = ['onCasPreRedirect'];
+    $events[CasPreRedirectEvent::class][] = ['onCasPreRedirect'];
 
     return $events;
   }
