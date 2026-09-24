@@ -42,3 +42,49 @@ function yale_cas_install() {
     ->setData($updateCasAttrConfig)
     ->save();
 }
+
+/**
+ * Lowercase CAS usernames in the authmap table.
+ */
+function yale_cas_update_10001() {
+  $database = \Drupal::database();
+  $authnames = $database->select('authmap', 'a')
+    ->fields('a', ['uid', 'authname'])
+    ->condition('provider', 'cas')
+    ->execute()
+    ->fetchAllKeyed();
+
+  $groups = [];
+  foreach ($authnames as $uid => $authname) {
+    $groups[mb_strtolower($authname)][$uid] = $authname;
+  }
+
+  $updated = 0;
+  $collisions = 0;
+  foreach ($groups as $lowercase => $accounts) {
+    if (count($accounts) > 1) {
+      // Two accounts whose CAS usernames differ only by case: a human has to
+      // decide which one is real, so leave both alone.
+      $collisions++;
+      \Drupal::logger('yale_cas')->warning('CAS usernames @names (uids @uids) differ only by case and were not lowercased. Merge or remove the duplicate account.', [
+        '@names' => implode(', ', $accounts),
+        '@uids' => implode(', ', array_keys($accounts)),
+      ]);
+      continue;
+    }
+    $uid = array_key_first($accounts);
+    if ($accounts[$uid] !== (string) $lowercase) {
+      $database->update('authmap')
+        ->fields(['authname' => $lowercase])
+        ->condition('uid', $uid)
+        ->condition('provider', 'cas')
+        ->execute();
+      $updated++;
+    }
+  }
+
+  return t('Lowercased @updated CAS usernames. Skipped @collisions case-only duplicates (see the yale_cas log).', [
+    '@updated' => $updated,
+    '@collisions' => $collisions,
+  ]);
+}
